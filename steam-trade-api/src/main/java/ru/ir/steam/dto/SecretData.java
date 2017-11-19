@@ -20,16 +20,7 @@ public class SecretData implements Serializable {
 
     private final String machineAuthValue;
 
-    private final String gmailImapAddress;
-
-    private final String gmailAddress;
-
-    private final String gmailLabel;
-
-    private final String gmailPassword;
-
-    public SecretData(String apiKey, String deviceId, String password, String sharedSecret, String identitySecret, String steamId, String machineAuthKey, String machineAuthValue,
-                      String gmailImapAddress, String gmailAddress, String gmailLabel, String gmailPassword) {
+    public SecretData(String apiKey, String deviceId, String password, String sharedSecret, String identitySecret, String steamId, String machineAuthKey, String machineAuthValue) {
         this.apiKey = apiKey;
         this.deviceId = deviceId;
         this.password = password;
@@ -38,10 +29,6 @@ public class SecretData implements Serializable {
         this.steamId = steamId;
         this.machineAuthKey = machineAuthKey;
         this.machineAuthValue = machineAuthValue;
-        this.gmailImapAddress = gmailImapAddress;
-        this.gmailAddress = gmailAddress;
-        this.gmailLabel = gmailLabel;
-        this.gmailPassword = gmailPassword;
     }
 
     public String getApiKey() {
@@ -76,22 +63,6 @@ public class SecretData implements Serializable {
         return machineAuthValue;
     }
 
-    public String getGmailImapAddress() {
-        return gmailImapAddress;
-    }
-
-    public String getGmailAddress() {
-        return gmailAddress;
-    }
-
-    public String getGmailLabel() {
-        return gmailLabel;
-    }
-
-    public String getGmailPassword() {
-        return gmailPassword;
-    }
-
     @Override
     public String toString() {
         return "SecretData{" +
@@ -103,10 +74,6 @@ public class SecretData implements Serializable {
                 ", steamId='" + steamId + '\'' +
                 ", machineAuthKey='" + machineAuthKey + '\'' +
                 ", machineAuthValue='" + machineAuthValue + '\'' +
-                ", gmailImapAddress='" + gmailImapAddress + '\'' +
-                ", gmailAddress='" + gmailAddress + '\'' +
-                ", gmailLabel='" + gmailLabel + '\'' +
-                ", gmailPassword='" + gmailPassword + '\'' +
                 '}';
     }
 }

@@ -53,7 +53,6 @@ public class SteamUserActor extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder().matchEquals(Command.LOGIN, login -> {
             autorizedUser = steamAuthApi.login(steamUser, secretData);
-            logger.info("User autorized: " + steamUser.getUsername());
             getSender().tell("AUTORIZED", getSelf());
             getContext().become(authorizedState, true);
         }).build();

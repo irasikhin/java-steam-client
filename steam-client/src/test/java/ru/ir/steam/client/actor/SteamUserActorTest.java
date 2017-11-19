@@ -35,11 +35,7 @@ public class SteamUserActorTest {
 
     @Test
     public void testAuthorization() throws Exception {
-        SteamUser steamUser = new SteamUser();
-        steamUser.setId(1L);
-        steamUser.setUsername("nettierichards18");
-        steamUser.setCookies("[]");
-        steamUser.setStatus("ACTIVE");
+        SteamUser steamUser = new SteamUser("nettierichards18","[]");
         SteamAuthApi steamAuthApi = mock(SteamAuthApi.class);
         SteamTradeApi steamTradeApi = mock(SteamTradeApi.class);
         SecretData secretData = mock(SecretData.class);

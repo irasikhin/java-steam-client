@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG" packages="ru.youweb.utils.plugin">
+<Configuration status="DEBUG" packages="ru.ir.utils.plugin">
     <Properties>
-        <Property name="LOG_DIR">${ts:log.dir}</Property>
+        <Property name="LOG_DIR">./logs</Property>
     </Properties>
     <Appenders>
         <RollingRandomAccessFile name="main" fileName="${LOG_DIR}/main.log"

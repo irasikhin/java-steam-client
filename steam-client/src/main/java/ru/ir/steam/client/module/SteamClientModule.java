@@ -22,9 +22,9 @@ public class SteamClientModule extends AbstractModule {
     protected void configure() {
     }
 
-    @Named("main")
     @Provides
     @Singleton
+    @Named("main")
     public Config config() {
         return ConfigFactory.load();
     }

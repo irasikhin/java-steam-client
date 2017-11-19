@@ -5,12 +5,8 @@ import lombok.Data;
 @Data
 public class SteamUser {
 
-    private Long id;
+    private final String username;
 
-    private String username;
-
-    private String cookies;
-
-    private String status;
+    private final String cookies;
 
 }

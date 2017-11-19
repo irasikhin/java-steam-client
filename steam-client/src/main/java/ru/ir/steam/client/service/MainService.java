@@ -82,6 +82,7 @@ public class MainService {
                 String username = userConfig.getString("steam.username");
                 try {
                     actors.put(username, authorization(username));
+                    Thread.sleep(10000);
                 } catch (Exception ex) {
                     logger.error("Error during user " + username + " authorization", ex);
                 }

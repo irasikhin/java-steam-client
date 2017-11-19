@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG" packages="ru.ir.utils.plugin">
+<Configuration status="WARN" packages="ru.ir.utils.plugin">
     <Properties>
-        <Property name="LOG_DIR">./logs</Property>
+        <Property name="LOG_DIR">${sys:app.home}/../logs</Property>
     </Properties>
     <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
         <RollingRandomAccessFile name="main" fileName="${LOG_DIR}/main.log"
                                  filePattern="${LOG_DIR}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"
                                  immediateFlush="false"
@@ -21,8 +24,11 @@
         </Async>
     </Appenders>
     <Loggers>
-        <Root level="debug" includeLocation="false">
+        <Root level="info" includeLocation="false">
             <AppenderRef ref="amain"/>
+        </Root>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>

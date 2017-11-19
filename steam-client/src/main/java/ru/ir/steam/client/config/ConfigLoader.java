@@ -15,11 +15,11 @@ public class ConfigLoader {
         Config config = ConfigFactory.load();
         Config usersConfig;
         if (config.hasPath("app.home")) {
-            logger.debug("Загружаем конфиг из директории: {}", config.getString("app.home") + "/conf");
+            logger.debug("Loading config from path: {}", config.getString("app.home") + "/conf");
             String appHome = config.getString("app.home");
             usersConfig = ConfigFactory.parseFile(new File(appHome + "/conf/users.conf")).resolve();
         } else {
-            logger.debug("Загружаем конфиг из classpath: users.conf");
+            logger.debug("Loading config from classpath: users.conf");
             usersConfig = ConfigFactory.load("users.conf").resolve();
         }
 

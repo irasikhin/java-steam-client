@@ -1,10 +1,12 @@
 package ru.ir.steam.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Data
 public class AuthResult implements Serializable {
 
     @JsonProperty("success")
@@ -37,6 +39,7 @@ public class AuthResult implements Serializable {
     @JsonProperty("transfer_parameters")
     private TransferParameters transferParameters;
 
+    @Data
     public static final class TransferParameters {
 
         @JsonProperty("steamid")
@@ -57,160 +60,6 @@ public class AuthResult implements Serializable {
         @JsonProperty("token_secure")
         private String tokenSecure;
 
-        public String getSteamId() {
-            return steamId;
-        }
-
-        public void setSteamId(String steamId) {
-            this.steamId = steamId;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-        public String getAuth() {
-            return auth;
-        }
-
-        public void setAuth(String auth) {
-            this.auth = auth;
-        }
-
-        public Boolean getRememberLogin() {
-            return rememberLogin;
-        }
-
-        public void setRememberLogin(Boolean rememberLogin) {
-            this.rememberLogin = rememberLogin;
-        }
-
-        public String getWebCookie() {
-            return webCookie;
-        }
-
-        public void setWebCookie(String webCookie) {
-            this.webCookie = webCookie;
-        }
-
-        public String getTokenSecure() {
-            return tokenSecure;
-        }
-
-        public void setTokenSecure(String tokenSecure) {
-            this.tokenSecure = tokenSecure;
-        }
-
-        @Override
-        public String toString() {
-            return "TransferParameters{" +
-                    "steamId='" + steamId + '\'' +
-                    ", token='" + token + '\'' +
-                    ", auth='" + auth + '\'' +
-                    ", rememberLogin=" + rememberLogin +
-                    ", webCookie='" + webCookie + '\'' +
-                    ", tokenSecure='" + tokenSecure + '\'' +
-                    '}';
-        }
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Boolean getCaptchaNeeded() {
-        return captchaNeeded;
-    }
-
-    public void setCaptchaNeeded(Boolean captchaNeeded) {
-        this.captchaNeeded = captchaNeeded;
-    }
-
-    public String getCaptchaGid() {
-        return captchaGid;
-    }
-
-    public void setCaptchaGid(String captchaGid) {
-        this.captchaGid = captchaGid;
-    }
-
-    public Boolean getEmailAuthNeeded() {
-        return emailAuthNeeded;
-    }
-
-    public void setEmailAuthNeeded(Boolean emailAuthNeeded) {
-        this.emailAuthNeeded = emailAuthNeeded;
-    }
-
-    public String getEmailSteamId() {
-        return emailSteamId;
-    }
-
-    public void setEmailSteamId(String emailSteamId) {
-        this.emailSteamId = emailSteamId;
-    }
-
-    public Boolean getRequiresTwoFactor() {
-        return requiresTwoFactor;
-    }
-
-    public void setRequiresTwoFactor(Boolean requiresTwoFactor) {
-        this.requiresTwoFactor = requiresTwoFactor;
-    }
-
-    public Boolean getLoginComplete() {
-        return loginComplete;
-    }
-
-    public void setLoginComplete(Boolean loginComplete) {
-        this.loginComplete = loginComplete;
-    }
-
-    public List<String> getTransferUrls() {
-        return transferUrls;
-    }
-
-    public void setTransferUrls(List<String> transferUrls) {
-        this.transferUrls = transferUrls;
-    }
-
-    public TransferParameters getTransferParameters() {
-        return transferParameters;
-    }
-
-    public void setTransferParameters(TransferParameters transferParameters) {
-        this.transferParameters = transferParameters;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthResult{" +
-                "success=" + success +
-                ", message='" + message + '\'' +
-                ", captchaNeeded=" + captchaNeeded +
-                ", captchaGid='" + captchaGid + '\'' +
-                ", emailAuthNeeded=" + emailAuthNeeded +
-                ", emailSteamId='" + emailSteamId + '\'' +
-                ", requiresTwoFactor=" + requiresTwoFactor +
-                ", loginComplete=" + loginComplete +
-                ", transferUrls=" + transferUrls +
-                ", transferParameters=" + transferParameters +
-                '}';
-    }
 }

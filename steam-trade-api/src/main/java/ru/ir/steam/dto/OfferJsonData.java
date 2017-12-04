@@ -18,19 +18,4 @@ public class OfferJsonData {
     @JsonProperty("them")
     private final OfferPersonData them;
 
-    public boolean isNewversion() {
-        return newversion;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public OfferPersonData getMe() {
-        return me;
-    }
-
-    public OfferPersonData getThem() {
-        return them;
-    }
 }

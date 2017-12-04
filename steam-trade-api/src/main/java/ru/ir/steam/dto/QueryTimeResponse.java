@@ -1,9 +1,11 @@
 package ru.ir.steam.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
+@Data
 public class QueryTimeResponse implements Serializable {
 
     @JsonProperty("server_time")
@@ -33,75 +35,4 @@ public class QueryTimeResponse implements Serializable {
     @JsonProperty("max_attempts")
     private Integer maxAttempts;
 
-    public String getServerTime() {
-        return serverTime;
-    }
-
-    public void setServerTime(String serverTime) {
-        this.serverTime = serverTime;
-    }
-
-    public String getSkewToleranceSeconds() {
-        return skewToleranceSeconds;
-    }
-
-    public void setSkewToleranceSeconds(String skewToleranceSeconds) {
-        this.skewToleranceSeconds = skewToleranceSeconds;
-    }
-
-    public String getLargeTimeJink() {
-        return largeTimeJink;
-    }
-
-    public void setLargeTimeJink(String largeTimeJink) {
-        this.largeTimeJink = largeTimeJink;
-    }
-
-    public Long getProbeFrequencySeconds() {
-        return probeFrequencySeconds;
-    }
-
-    public void setProbeFrequencySeconds(Long probeFrequencySeconds) {
-        this.probeFrequencySeconds = probeFrequencySeconds;
-    }
-
-    public Long getAdjustedTimeProbeFrequencySeconds() {
-        return adjustedTimeProbeFrequencySeconds;
-    }
-
-    public void setAdjustedTimeProbeFrequencySeconds(Long adjustedTimeProbeFrequencySeconds) {
-        this.adjustedTimeProbeFrequencySeconds = adjustedTimeProbeFrequencySeconds;
-    }
-
-    public Long getHintProbeFrequencySeconds() {
-        return hintProbeFrequencySeconds;
-    }
-
-    public void setHintProbeFrequencySeconds(Long hintProbeFrequencySeconds) {
-        this.hintProbeFrequencySeconds = hintProbeFrequencySeconds;
-    }
-
-    public Long getSyncTimeout() {
-        return syncTimeout;
-    }
-
-    public void setSyncTimeout(Long syncTimeout) {
-        this.syncTimeout = syncTimeout;
-    }
-
-    public Long getTryAgainSeconds() {
-        return tryAgainSeconds;
-    }
-
-    public void setTryAgainSeconds(Long tryAgainSeconds) {
-        this.tryAgainSeconds = tryAgainSeconds;
-    }
-
-    public Integer getMaxAttempts() {
-        return maxAttempts;
-    }
-
-    public void setMaxAttempts(Integer maxAttempts) {
-        this.maxAttempts = maxAttempts;
-    }
 }

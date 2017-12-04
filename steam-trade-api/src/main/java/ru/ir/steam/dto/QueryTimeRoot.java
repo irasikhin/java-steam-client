@@ -9,11 +9,4 @@ public class QueryTimeRoot implements Serializable {
     @JsonProperty("response")
     private QueryTimeResponse response;
 
-    public QueryTimeResponse getResponse() {
-        return response;
-    }
-
-    public void setResponse(QueryTimeResponse response) {
-        this.response = response;
-    }
 }

@@ -11,11 +11,4 @@ public class GetTradeOfferResponse implements Serializable {
     @JsonProperty("response")
     private GetTradeOffer response;
 
-    public GetTradeOffer getResponse() {
-        return response;
-    }
-
-    public void setResponse(GetTradeOffer response) {
-        this.response = response;
-    }
 }

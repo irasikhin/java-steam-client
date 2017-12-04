@@ -15,19 +15,4 @@ public class GetTradeOffersOutput implements Serializable {
     @JsonProperty("trade_offers_received")
     private List<CEconTradeOffer> tradeOffersReceived;
 
-    public List<CEconTradeOffer> getTradeOffersSent() {
-        return tradeOffersSent;
-    }
-
-    public void setTradeOffersSent(List<CEconTradeOffer> tradeOffersSent) {
-        this.tradeOffersSent = tradeOffersSent;
-    }
-
-    public List<CEconTradeOffer> getTradeOffersReceived() {
-        return tradeOffersReceived;
-    }
-
-    public void setTradeOffersReceived(List<CEconTradeOffer> tradeOffersReceived) {
-        this.tradeOffersReceived = tradeOffersReceived;
-    }
 }

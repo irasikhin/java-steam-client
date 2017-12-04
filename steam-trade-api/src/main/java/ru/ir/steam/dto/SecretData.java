@@ -16,19 +16,13 @@ public class SecretData implements Serializable {
 
     private final String steamId;
 
-    private final String machineAuthKey;
-
-    private final String machineAuthValue;
-
-    public SecretData(String apiKey, String deviceId, String password, String sharedSecret, String identitySecret, String steamId, String machineAuthKey, String machineAuthValue) {
+    public SecretData(String apiKey, String deviceId, String password, String sharedSecret, String identitySecret, String steamId) {
         this.apiKey = apiKey;
         this.deviceId = deviceId;
         this.password = password;
         this.sharedSecret = sharedSecret;
         this.identitySecret = identitySecret;
         this.steamId = steamId;
-        this.machineAuthKey = machineAuthKey;
-        this.machineAuthValue = machineAuthValue;
     }
 
     public String getApiKey() {
@@ -55,14 +49,6 @@ public class SecretData implements Serializable {
         return steamId;
     }
 
-    public String getMachineAuthKey() {
-        return machineAuthKey;
-    }
-
-    public String getMachineAuthValue() {
-        return machineAuthValue;
-    }
-
     @Override
     public String toString() {
         return "SecretData{" +
@@ -72,8 +58,6 @@ public class SecretData implements Serializable {
                 ", sharedSecret='" + sharedSecret + '\'' +
                 ", identitySecret='" + identitySecret + '\'' +
                 ", steamId='" + steamId + '\'' +
-                ", machineAuthKey='" + machineAuthKey + '\'' +
-                ", machineAuthValue='" + machineAuthValue + '\'' +
                 '}';
     }
 }

@@ -36,8 +36,15 @@ public class CodeGenerator {
     public String getConfirmationUrl(String identitySecret, String phoneId, String steamId) {
         Long serverSeconds = getServerTime();
         String confirmationUrl = "https://steamcommunity.com/mobileconf/conf";
-        return String.format("%s?p=%s&a=%s&k=%s&t=%d&m=android&tag=%s", confirmationUrl, phoneId, steamId, base64encryptedConfirmationHash(identitySecret, serverSeconds,
-                "conf"), serverSeconds, "conf");
+        return String.format(
+                "%s?p=%s&a=%s&k=%s&t=%d&m=android&tag=%s",
+                confirmationUrl,
+                phoneId,
+                steamId,
+                base64encryptedConfirmationHash(identitySecret, serverSeconds, "conf"),
+                serverSeconds,
+                "conf"
+        );
     }
 
     public String getTaggedConfirmationUrlParams(String identitySecret, String phoneId, String steamId, String str) {

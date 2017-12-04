@@ -117,6 +117,72 @@ public class SteamTradeApi {
         }
     }
 
+    public boolean sendTradeOffer(SendTradeOffer tradeOffer, AuthorizedSteamUser steamUser, SecretData secretData) throws IOException {
+        HttpClientContext context = steamUser.getContext();
+        System.out.println("getSessionId(context.getCookieStore().getCookies()): " + getSessionId(context.getCookieStore().getCookies()));
+        HttpUriRequest request = post(steamUrl + "/tradeoffer/new/send")
+                .addParameter("sessionid", getSessionId(context.getCookieStore().getCookies()))
+                .addParameter("serverid", "1")
+                .addParameter("partner", tradeOffer.getPartner())
+                .addParameter("tradeoffermessage", tradeOffer.getMessage())
+                .addParameter("captcha", "")
+                .addParameter("json_tradeoffer", objectMapper.writeValueAsString(tradeOffer.getData()))
+                .addParameter("trade_offer_create_params", objectMapper.writeValueAsString(tradeOffer.getTradeOfferCreateParams()))
+                .addHeader("Referer", "https://steamcommunity.com/tradeoffer/new/?partner=257597261")
+                .build();
+
+        System.out.println("REQ: " + request.toString());
+        System.out.println("objectMapper.writeValueAsString(tradeOffer.getData()): " + objectMapper.writeValueAsString(tradeOffer.getData()));
+        System.out.println("objectMapper.writeValueAsString(tradeOffer.getTradeOfferCreateParams()): " + objectMapper.writeValueAsString(tradeOffer.getTradeOfferCreateParams()));
+        HttpResponse httpResponse = client.execute(request, context);
+        String responseString = EntityUtils.toString(httpResponse.getEntity());
+        System.out.println("responseString: " + responseString);
+        SendOfferResponse response = objectMapper.readValue(responseString, SendOfferResponse.class);
+        if (PlainUtils.isEmpty(response.getStrError())) {
+            int tries = 0;
+            boolean isConfirmed;
+            while (!(isConfirmed = confirm(response.getTradeOfferId(), steamUser, secretData)) && tries < 3) {
+                tries++;
+            }
+            if (isConfirmed) {
+                logger.info("Confirmed");
+            } else {
+                logger.error("Something was wrong");
+            }
+        } else {
+            logger.error("Error during trade offer sending {}", response.getStrError());
+            return false;
+        }
+
+        return false;
+    }
+
+    private boolean confirmSells(AuthorizedSteamUser steamUser, SecretData secretData) throws IOException {
+        String deviceId = secretData.getDeviceId();
+        String identitySecret = secretData.getIdentitySecret();
+        String steamId = secretData.getSteamId();
+        String url = codeGenerator.getConfirmationUrl(identitySecret, deviceId, steamId);
+
+        String html = EntityUtils.toString(client.execute(get(url).build(), steamUser.getContext()).getEntity());
+        System.out.println("html: " + html);
+        Document document = Jsoup.parse(html);
+        Elements elements = document.select("div .mobileconf_list_entry");
+        for (Element element : elements) {
+            String confid = element.attr("data-confid");
+            String key = element.attr("data-key");
+            String confirmUrl = steamUrl + "/mobileconf/ajaxop?op=allow&" + codeGenerator.getTaggedConfirmationUrlParams(identitySecret, deviceId, steamId, "allow") +
+                    "&cid=" + confid + "&ck=" + key;
+            String confirmContent = client.execute(steamHost, get(confirmUrl).build(), new BasicResponseHandler(), steamUser.getContext());
+            ConfirmResponse confirmResponse = objectMapper.readValue(confirmContent, ConfirmResponse.class);
+            if (!confirmResponse.isSuccess()) {
+                logger.warn("Подтверждения для продаж не найдены, либо выполнены некорректно");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private boolean confirm(String tradeofferid, AuthorizedSteamUser steamUser, SecretData secretData) throws IOException {
         String deviceId = secretData.getDeviceId();
         String identitySecret = secretData.getIdentitySecret();
@@ -124,6 +190,7 @@ public class SteamTradeApi {
         String url = codeGenerator.getConfirmationUrl(identitySecret, deviceId, steamId);
 
         String html = EntityUtils.toString(client.execute(get(url).build(), steamUser.getContext()).getEntity());
+        System.out.println("html: " + html);
         Document document = Jsoup.parse(html);
         Elements elements = document.select("div .mobileconf_list_entry");
         for (Element element : elements) {

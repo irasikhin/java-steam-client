@@ -2,6 +2,8 @@ package ru.ir.steam.client.cmd;
 
 public class Command {
 
+    public static final String GET_CONFIRMATION_URL = "getConfirmationUrl";
+
     public static final String GET_CODE = "getCode";
 
     public static final String ACCEPT = "accept";

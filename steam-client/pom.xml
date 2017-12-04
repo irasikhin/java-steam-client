@@ -69,12 +69,12 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http_2.11</artifactId>
-            <version>10.0.5</version>
+            <version>10.0.11</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http-jackson_2.11</artifactId>
-            <version>10.0.5</version>
+            <version>10.0.11</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>

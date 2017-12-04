@@ -22,9 +22,7 @@ public class SecretDataCache {
                             userConfig.getString("steam.password"),
                             userConfig.getString("steam.shared_secret"),
                             userConfig.getString("steam.identity_secret"),
-                            userConfig.getString("steam.id"),
-                            userConfig.getString("steam.machineAuthKey"),
-                            userConfig.getString("steam.machineAuthValue")
+                            userConfig.getString("steam.id")
                     );
                 }
             }

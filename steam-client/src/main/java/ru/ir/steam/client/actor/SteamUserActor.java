@@ -23,7 +23,7 @@ public class SteamUserActor extends AbstractActor {
 
     private final AbstractActor.Receive authorizedState;
 
-    private AuthorizedSteamUser autorizedUser;
+    private AuthorizedSteamUser authorizedUser;
 
     public SteamUserActor(SteamUser steamUser, SecretData secretData, SteamAuthApi steamAuthApi, SteamTradeApi steamTradeApi) {
         this.steamUser = steamUser;
@@ -31,7 +31,7 @@ public class SteamUserActor extends AbstractActor {
         this.steamAuthApi = steamAuthApi;
         this.codeGenerator = new CodeGenerator();
         this.authorizedState = receiveBuilder().match(Accept.class, accept -> {
-            getSender().tell(steamTradeApi.acceptOffer(accept.getTradeofferid(), autorizedUser, secretData), getSelf());
+            getSender().tell(steamTradeApi.acceptOffer(accept.getTradeofferid(), authorizedUser, secretData), getSelf());
         }).match(GetTrade.class, getTrade -> {
             getSender().tell(steamTradeApi.getOffer(secretData.getApiKey(), getTrade.getTradeofferid(), getTrade.getLanguage()), getSelf());
         }).match(Decline.class, decline -> {
@@ -39,20 +39,24 @@ public class SteamUserActor extends AbstractActor {
         }).match(Cancel.class, cancel -> {
             getSender().tell(steamTradeApi.cancelOffer(secretData.getApiKey(), cancel.getTradeofferid()), getSelf());
         }).matchEquals(Command.GET_ACTIVE_TRADES, getActiveTrades -> {
-            GetTradeOffersResponse response = steamTradeApi.getActiveOffers(secretData.getApiKey(), autorizedUser);
+            GetTradeOffersResponse response = steamTradeApi.getActiveOffers(secretData.getApiKey(), authorizedUser);
             getSender().tell(response, getSelf());
         }).match(GetInventory.class, getInventory -> {
-            SteamInventory inventory = steamTradeApi.getInventory(secretData.getSteamId(), getInventory.getGameId(), autorizedUser);
+            SteamInventory inventory = steamTradeApi.getInventory(secretData.getSteamId(), getInventory.getGameId(), authorizedUser);
             getSender().tell(inventory, getSelf());
         }).matchEquals(Command.GET_CODE, getCode -> {
             getSender().tell(codeGenerator.getCode(secretData.getSharedSecret()), getSelf());
+        }).matchEquals(Command.GET_CONFIRMATION_URL, getConfirmationUrl -> {
+            getSender().tell(codeGenerator.getConfirmationUrl(secretData.getIdentitySecret(), secretData.getDeviceId(), secretData.getSteamId()), getSelf());
+        }).match(SendTradeOfferMessage.class, message -> {
+            getSender().tell(steamTradeApi.sendTradeOffer(message.getTradeOffer(), authorizedUser, secretData), getSelf());
         }).build();
     }
 
     @Override
     public Receive createReceive() {
         return receiveBuilder().matchEquals(Command.LOGIN, login -> {
-            autorizedUser = steamAuthApi.login(steamUser, secretData);
+            authorizedUser = steamAuthApi.login(steamUser, secretData);
             getSender().tell("AUTORIZED", getSelf());
             getContext().become(authorizedState, true);
         }).build();

@@ -1,6 +1,5 @@
 package ru.ir.steam;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import one.util.streamex.StreamEx;
 import org.apache.http.HttpHost;
@@ -10,7 +9,6 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.apache.http.client.methods.RequestBuilder.*;
-import static org.apache.logging.log4j.util.Strings.isNotEmpty;
 
 public class SteamAuthApi {
 
@@ -64,7 +61,7 @@ public class SteamAuthApi {
             RsaKey rsaKey = getRsaKey(steamUser.getUsername(), httpContext);
             String encodedPassword = encodePassword(secretData.getPassword(), rsaKey);
             signIn(new LoginInfo(steamUser.getUsername(), encodedPassword, rsaKey.getTimestamp()), secretData, httpContext);
-            List<Cookie> submittedCookies = submit(secretData, httpContext);
+            List<Cookie> submittedCookies = submit(httpContext);
             httpContext.getCookieStore().clear();
             submittedCookies.forEach(c -> httpContext.getCookieStore().addCookie(c));
             return new AuthorizedSteamUser(steamUser.getUsername(), httpContext);
@@ -114,40 +111,19 @@ public class SteamAuthApi {
         }
     }
 
-    private List<Cookie> submit(SecretData secretData, HttpClientContext context) throws ExecutionException, InterruptedException, IOException {
-        String machineAuthKey = secretData.getMachineAuthKey();
-        String machineAuthValue = secretData.getMachineAuthValue();
+    private List<Cookie> submit(HttpClientContext context) throws ExecutionException, InterruptedException, IOException {
         logger.info("Submit data to steam");
-
         client.execute(post(steamUrl).build(), context);
         logger.debug("Current cookies: " + context.getCookieStore().getCookies());
-        if (isNotEmpty(machineAuthKey) && isNotEmpty(machineAuthValue)) {
-            logger.debug("MachineAuthKey: {}, machineAuthValue: {}", machineAuthKey, machineAuthValue);
-            return StreamEx.of(context.getCookieStore().getCookies()).map(cookie -> {
-                if (cookie.getName().startsWith("steamMachineAuth")) {
-                    BasicClientCookie basicClientCookie = new BasicClientCookie(machineAuthKey, machineAuthValue);
-                    basicClientCookie.setDomain(cookie.getDomain());
-                    return basicClientCookie;
-                } else {
-                    return cookie;
-                }
-            }).toList();
-        }
-
         return context.getCookieStore().getCookies();
-    }
-
-    private List<Cookie> getCookiesFromJson(String cookies) throws IOException {
-        return objectMapper.readValue(cookies, new TypeReference<List<CookieWrapper>>() {
-        });
     }
 
     private Boolean isAuthorized(HttpClientContext httpClientContext) throws IOException {
         client.execute(host, head(steamUrl).build(), httpClientContext);
 
-        return StreamEx.of(httpClientContext.getCookieStore().getCookies()).filter(cookie ->
+        return StreamEx.of(httpClientContext.getCookieStore().getCookies()).anyMatch(cookie ->
                 "steamLogin".equals(cookie.getName()) && cookie.getValue() != null && cookie.getValue().length() > 0 &&
-                        !"deleted".equals(cookie.getValue())).findAny().isPresent();
+                        !"deleted".equals(cookie.getValue()));
     }
 
     private RsaKey getRsaKey(String username, HttpClientContext httpClientContext) throws IOException {

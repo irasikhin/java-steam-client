@@ -76,7 +76,18 @@ public class HttpApi extends AllDirectives {
                         path("get_code", () -> {
                             CompletionStage<Object> resp = PatternsCS.ask(ref, Command.GET_CODE, timeout);
                             return completeOKWithFuture(resp, Jackson.marshaller());
-                        })
+                        }),
+                        path("get_confirmation_url", () -> {
+                            CompletionStage<Object> resp = PatternsCS.ask(ref, Command.GET_CONFIRMATION_URL, timeout);
+                            return completeOKWithFuture(resp, Jackson.marshaller());
+                        }),
+                        path("send_trade", () -> post(() ->
+                                entity(Jackson.unmarshaller(SendTradeOfferMessage.class), message -> {
+                                    System.out.println("message: " + message);
+                                    CompletionStage<Object> resp = PatternsCS.ask(ref, message, timeout);
+                                    return completeOKWithFuture(resp, Jackson.marshaller());
+                                })
+                        ))
                 )))
         ));
     }
